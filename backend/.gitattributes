@@ -1,0 +1,5 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+target/
+*.log
+src/main/resources/application.yml

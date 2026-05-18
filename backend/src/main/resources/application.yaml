@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: sfc-workflow
+  datasource:
+    url: jdbc:mysql://localhost:3306/ems_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    show-sql: true
+    open-in-view: false
+
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+sql:
+  init:
+    mode: always
