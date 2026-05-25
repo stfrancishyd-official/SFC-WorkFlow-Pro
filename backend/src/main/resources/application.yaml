@@ -18,12 +18,11 @@ spring:
       hibernate:
         format_sql: true
 
+  sql:
+    init:
+      mode: never
 server:
   port: 8080
-
-sql:
-  init:
-    mode: always
 
 jwt:
   secrete: DjJNXH8jV4WC2GRnFQeY5scndMhCK9tp6YroZhQeDgd

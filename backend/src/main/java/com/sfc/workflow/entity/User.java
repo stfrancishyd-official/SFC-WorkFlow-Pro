@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.sfc.workflow.enums.Role;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,7 +30,7 @@ public class User {
         private Long id;
 
         private String name;
-        
+
         @Email(message = "Invalid email format")
         @NotBlank(message = "Email required")
         @Column(unique = true, nullable = false)
@@ -39,6 +41,6 @@ public class User {
         @Enumerated(EnumType.STRING)
         private Role role;
 
-        private boolean isActive= true;
-        private LocalDateTime createdAt= LocalDateTime.now();
+        private boolean isActive = true;
+        private LocalDateTime createdAt = LocalDateTime.now();
 }
