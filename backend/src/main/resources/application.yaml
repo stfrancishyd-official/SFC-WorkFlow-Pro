@@ -24,3 +24,6 @@ server:
 sql:
   init:
     mode: always
+
+jwt:
+  secrete: DjJNXH8jV4WC2GRnFQeY5scndMhCK9tp6YroZhQeDgd

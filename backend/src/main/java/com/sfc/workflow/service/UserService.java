@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sfc.workflow.config.JwtService;
 import com.sfc.workflow.dto.LoginRequestDto;
 import com.sfc.workflow.dto.LoginResponseDto;
 import com.sfc.workflow.dto.RegisterRequestDto;
@@ -13,78 +14,79 @@ import com.sfc.workflow.repository.UserRepository;
 @Service
 public class UserService {
 
-
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public LoginResponseDto register(RegisterRequestDto dto){
+    @Autowired
+    private JwtService jwtService;
 
-         // Check if email already exists
+    public LoginResponseDto register(RegisterRequestDto dto) {
 
-         if(userRepository.findByEmail(dto.getEmail()).isPresent()){
+        // Check if email already exists
+
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already Registered");
-         }
+        }
 
-         // create a new user entity
-          
-         
-          User user= new User();
-          user.setName(dto.getName());
-          user.setEmail(dto.getEmail());
-          
-          // encrypt the password
+        // create a new user entity
 
-          user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        User user = new User();
+        user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
 
-          // Set the role of the user
-          user.setRole(dto.getRole());
+        // encrypt the password
 
-          // save user details
-           
-          User savedUser= userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-          // Return the response
+        // Set the role of the user
+        user.setRole(dto.getRole());
 
-           LoginResponseDto response= new LoginResponseDto();
-           response.setId(savedUser.getId());
-           response.setEmail(savedUser.getEmail());
-           response.setRole(savedUser.getRole());
-           response.setMessage("user registered Sucessfully");
+        // save user details
 
-           return response;
+        User savedUser = userRepository.save(user);
+
+        // Return the response
+
+        LoginResponseDto response = new LoginResponseDto();
+        response.setId(savedUser.getId());
+        response.setEmail(savedUser.getEmail());
+        response.setRole(savedUser.getRole());
+        response.setMessage("user registered Sucessfully");
+
+        return response;
     }
 
-    public LoginResponseDto login(LoginRequestDto dto){
+    public LoginResponseDto login(LoginRequestDto dto) {
 
         // Find the user by email
 
-        User user= userRepository.findByEmail(dto.getEmail())
-                   .orElseThrow(() -> new RuntimeException("user not found"));
-        
-        //  Check the password
-         
-        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())){
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("user not found"));
+
+        // Check the password
+
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
 
             throw new RuntimeException("Invalid Password");
         }
 
         // Generate JWT Token
-         String token =jwtService.generateToken(user);
+        String token = jwtService.generateToken(user);
 
         // Return response
-         
-        LoginResponseDto response= new LoginResponseDto();
+
+        LoginResponseDto response = new LoginResponseDto();
         response.setId(user.getId());
-       
+
         response.setEmail(user.getEmail());
-        response.setRole(user.getRole().name());
+        response.setRole(user.getRole());
         response.setMessage("Login successful");
         response.setToken(token);
 
-    return response;
+        return response;
     }
 
 }
