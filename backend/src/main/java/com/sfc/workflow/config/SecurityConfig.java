@@ -16,49 +16,49 @@ import com.sfc.workflow.security.JwtAuthenticationEntryPoint;
 
 @Configuration
 public class SecurityConfig {
-    @Autowired
-    private JwtAuthenticationFilter jwtFilter;
+        @Autowired
+        private JwtAuthenticationFilter jwtFilter;
 
-    @Autowired
-    private JwtAuthenticationEntryPoint entryPoint;
+        @Autowired
+        private JwtAuthenticationEntryPoint entryPoint;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(
+                        HttpSecurity http) throws Exception {
 
-        http
-                .csrf(csrf -> csrf.disable())
+                http
+                                .csrf(csrf -> csrf.disable())
 
-                .authorizeHttpRequests(auth -> auth
+                                .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/auth/**")
-                        .permitAll()
+                                                .requestMatchers(
+                                                                "/api/v1/auth/**")
+                                                .permitAll()
 
-                        .anyRequest().authenticated())
+                                                .anyRequest().authenticated())
 
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
+                                .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoint))
 
-                .sessionManagement(session -> session.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS))
+                                .sessionManagement(session -> session.sessionCreationPolicy(
+                                                SessionCreationPolicy.STATELESS));
 
-                .addFilterBefore(
-                        jwtFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+                // .addFilterBefore(
+                // jwtFilter,
+                // UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+        @Bean
+        public PasswordEncoder passwordEncoder() {
 
-        return new BCryptPasswordEncoder();
-    }
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
+        @Bean
+        public AuthenticationManager authenticationManager(
+                        AuthenticationConfiguration config) throws Exception {
 
-        return config.getAuthenticationManager();
-    }
+                return config.getAuthenticationManager();
+        }
 }

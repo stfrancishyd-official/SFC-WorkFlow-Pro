@@ -48,6 +48,8 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
+        String token = jwtService.generateToken(savedUser);
+
         // Return the response
 
         LoginResponseDto response = new LoginResponseDto();
@@ -55,6 +57,7 @@ public class UserService {
         response.setEmail(savedUser.getEmail());
         response.setRole(savedUser.getRole());
         response.setMessage("user registered Sucessfully");
+        response.setToken(token);
 
         return response;
     }
